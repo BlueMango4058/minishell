@@ -6,7 +6,7 @@
 /*   By: dsagong <dsagong@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/21 11:03:04 by dsagong           #+#    #+#             */
-/*   Updated: 2025/09/07 18:28:18 by dsagong          ###   ########.fr       */
+/*   Updated: 2026/03/03 15:42:01 by dsagong          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,12 @@ static int	get_op_length(t_token_type type)
 		return (0);
 }
 
+/**
+ * [Operator Identification]
+ * 파이프(|) 및 리다이렉션(<, >, <<, >>) 기호를 식별하고 타입을 부여
+ * - 연속된 동일 기호(<<, >>)를 감지하여 단일 리다이렉션과 구분된 타입을 할당
+ * - 결정된 타입에 따라 토큰의 길이(1 또는 2)를 반환하여 메인 루프의 인덱스를 갱신
+ */
 int	handle_operator(t_token **token_lst, char *input)
 {
 	int				len;

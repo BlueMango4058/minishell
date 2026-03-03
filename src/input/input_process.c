@@ -80,6 +80,14 @@ static int	expand_and_split(t_prompt *prompt)
 	return (1);
 }
 
+/**
+ * [Input Processing Pipeline]
+ * 1. Readline을 통한 사용자 입력 수신
+ * 2. Lexical Analysis: 입력 문자열을 토큰 단위로 분리
+ * 3. Grammar Check: 문법적 오류(따옴표 미종결, 파이프 오류 등) 선검증
+ * 4. Heredoc Processing: 실행 전 히어독 데이터를 우선적으로 수집
+ * 5. Expansion & Splitting: 환경 변수 치환 및 단어 재구성
+ */
 int	input_process(t_prompt *prompt)
 {
 	t_grammar_status	status;

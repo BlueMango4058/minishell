@@ -6,7 +6,7 @@
 /*   By: dsagong <dsagong@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/08 11:59:44 by dsagong           #+#    #+#             */
-/*   Updated: 2025/09/18 15:22:02 by dsagong          ###   ########.fr       */
+/*   Updated: 2026/03/03 15:42:41 by dsagong          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,9 +63,6 @@ static void	heredoc_child(t_delim_info delim_info, int write_fd, t_envp *envp)
 	exit(0);
 }
 
-//전역변수 exit_status 계산법이라는데 gpt한테 받은거라 아직 잘 모릅니다...
-//나중에 알게되면 알려드를게요
-//기본적으로 자식 프로세스 생성해서 입력을 받습니다.
 int	read_heredoc(t_prompt *prompt, t_delim_info delim_info)
 {
 	int		fd[2];
@@ -93,8 +90,12 @@ int	read_heredoc(t_prompt *prompt, t_delim_info delim_info)
 	return (fd[0]);
 }
 
-//herdoc value 처리해서 delim 만들어서 사용
-//자식프로세스 에서 fd 1에 입력후 fd 0반환
+/**
+ * [Heredoc Workflow Controller]
+ * 토큰 리스트를 순회하며 T_HEREDOC 타입을 찾아 처리
+ * - 각 히어독 세션마다 고유한 FD를 생성하여 t_hd 리스트에 저장
+ * - 입력 도중 오류(Ctrl+C 등) 발생 시 즉시 중단하고 리스트를 정리
+ */
 int	heredoc_process(t_prompt *prompt)
 {
 	t_token			*curr;

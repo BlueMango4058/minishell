@@ -6,7 +6,7 @@
 /*   By: dsagong <dsagong@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/21 09:48:39 by dsagong           #+#    #+#             */
-/*   Updated: 2025/09/08 10:15:25 by dsagong          ###   ########.fr       */
+/*   Updated: 2026/03/03 15:41:37 by dsagong          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,6 +50,14 @@ static int	add_endnode(t_token **token_lst)
 	return (add_new_token(token_lst, end_node_value, T_END));
 }
 
+/**
+ * [Lexical Analysis: Tokenization]
+ * 사용자 입력 문자열을 연산자(|, <, >, <<, >>)와 일반 단어(Word) 단위로 분리하여 
+ * 연결 리스트(t_token)를 생성
+ * - 공백(Whitespace)을 기준으로 토큰의 경계를 인식
+ * - add_end_node 옵션이 활성화된 경우, 리스트의 끝에 T_END(newline) 노드를 추가하여 
+ * 이후 문법 검증 단계에서 EOF 처리
+ */
 t_token	*input_lexing(char *input, int add_end_node)
 {
 	t_token	*token_lst;

@@ -6,7 +6,7 @@
 /*   By: dsagong <dsagong@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/03 16:11:42 by dsagong           #+#    #+#             */
-/*   Updated: 2025/09/15 16:17:18 by dsagong          ###   ########.fr       */
+/*   Updated: 2026/03/03 15:42:32 by dsagong          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,6 +97,12 @@ static void	update_flags(t_token *curr, int *do_check_filename,
 		*do_check_filename = 1;
 }
 
+/**
+ * [Defensive Expansion Logic]
+ * 1. 환경 변수($) 확장 시, 싱글 따옴표 내부의 변수는 확장을 생략
+ * 2. 리다이렉션 파일명의 경우, 확장 결과가 공백이거나 비어있다면 
+ * 'Ambiguous Redirect'로 간주하여 T_WRONG_FILNAME 타입을 부여
+ */
 int	expand_token(t_token *token_lst, t_envp *envp_lst)
 {
 	t_token	*curr;

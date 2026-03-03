@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   grammar_check.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jechoi <jechoi@student.42gyeongsan.kr>     +#+  +:+       +#+        */
+/*   By: dsagong <dsagong@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/05 18:26:25 by dsagong           #+#    #+#             */
-/*   Updated: 2025/09/16 00:05:12 by jechoi           ###   ########.fr       */
+/*   Updated: 2026/03/03 15:44:42 by dsagong          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,10 +79,13 @@ static t_grammar_status	check_token_error(t_token *token_lst)
 	return (GRAMMAR_OK);
 }
 
-// 문법오류 케이스
-// quote 미 닫힘 -> EOF ERROR
-// pipe로 끝나기 -> EOF ERROR
-// redir연산자 뒤에 word안오기 및 파이프 연속 -> TOKEN ERROR
+/**
+ * [Fail-Fast Grammar Validation]
+ * 실행 단계로 넘어가기 전, 복합적인 문법 오류를 사전에 차단
+ * - Unclosed Quotes: 종결되지 않은 따옴표 체크
+ * - Operator Misuse: 연속된 파이프(||)나 리다이렉션 뒤에 인자가 없는 경우 등
+ * 이를 통해 불필요한 프로세스 생성을 막고 쉘의 안정성을 확보
+ */
 t_grammar_status	grammar_check(t_prompt *prompt)
 {
 	t_grammar_status	status;
