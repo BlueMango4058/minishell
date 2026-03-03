@@ -6,7 +6,7 @@
 /*   By: dsagong <dsagong@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/03 16:11:42 by dsagong           #+#    #+#             */
-/*   Updated: 2026/03/03 15:42:32 by dsagong          ###   ########.fr       */
+/*   Updated: 2026/03/03 16:23:45 by dsagong          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,10 @@ char	*expand_process(char *value, t_envp *envp_lst)
 	return (exp_data.result);
 }
 
-//quote 일반 상태일때 whitespcae 존재시 파일문법 오류
+/*
+* 확장된 파일명이 유효하지 않을 경우(공백 포함 등), 토큰을 즉시 삭제하지 않고 T_WRONG_FILNAME으로 마킹
+* 이는 실행부에서 'ambiguous redirect' 에러 메시지를 정확한 시점에 출력할 수 있도록 정보를 보존
+*/
 static int	handle_word(t_token *curr, t_envp *envp_lst, int do_check_filename)
 {
 	char	*orig_value;

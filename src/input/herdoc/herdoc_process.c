@@ -6,7 +6,7 @@
 /*   By: dsagong <dsagong@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/08 11:59:44 by dsagong           #+#    #+#             */
-/*   Updated: 2026/03/03 15:42:41 by dsagong          ###   ########.fr       */
+/*   Updated: 2026/03/03 16:30:02 by dsagong          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,6 +63,17 @@ static void	heredoc_child(t_delim_info delim_info, int write_fd, t_envp *envp)
 	exit(0);
 }
 
+/**
+ * [Heredoc 설계 의도 및 시그널 처리]
+ * 사용자의 Heredoc 입력과 쉘 메인 흐름의 완전한 분리.
+ * * 1. 독립적인 프로세스 운용: 자식 프로세스에서 입력을 수행함으로써, 
+ * 입력 중 Ctrl+C 발생 시 쉘 전체가 아닌 해당 작업만 즉시 취소되도록 구현
+ * 2. 파이프를 통한 데이터 인계: 파싱 단계에서 입력된 데이터를 파이프 버퍼에 보존
+ * 부모는 이 파이프의 읽기용 FD만 리스트에 안전하게 보관 후, 
+ * 명령어 실행 시점에 STDIN으로 연결하여 데이터 전달
+ * 3. 종료 상태 동기화: waitpid를 통한 자식의 상태 확인 및 
+ * 비정상 종료 발생 시 할당된 FD 폐쇄 및 제어권 회수
+ */
 int	read_heredoc(t_prompt *prompt, t_delim_info delim_info)
 {
 	int		fd[2];
